@@ -15,12 +15,16 @@ I took the basis of Elixir's old
 [GenFSM.Behaviour](https://github.com/elixir-lang/elixir/blob/a6f048b3de4a971c15fc8b66397cf2e4597793cb/lib/elixir/lib/gen_fsm/behaviour.ex) 
 and added some additional convenience methods.  Currently missing are the `start_link`, `stop`, and `enter_loop` methods
 
-## Documentation
-Complete [API documentation](http://erlang.org/doc/man/gen_fsm.html) can be found at 
-(http://erlang.org/doc/man/gen_fsm.html)
-and OTP [design principal documentation](http://erlang.org/doc/design_principles/fsm.html) 
-lives at (http://erlang.org/doc/man/gen_fsm.html)
+## Usage
 
+Just `use GenFSM` in your FSM module
+```elixir
+defmodule MyFSM do
+  use GenFSM
+  
+  # TODO: add some better examples
+end
+```
 
 ## Installation
 
@@ -31,3 +35,10 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
         def deps do
           [{:gen_fsm, "~> 0.0.1"}]
         end
+
+## Documentation
+
+Complete [API documentation](http://erlang.org/doc/man/gen_fsm.html) can be found at 
+(http://erlang.org/doc/man/gen_fsm.html)
+and OTP [design principal documentation](http://erlang.org/doc/design_principles/fsm.html) 
+lives at (http://erlang.org/doc/man/gen_fsm.html)
