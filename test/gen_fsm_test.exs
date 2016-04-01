@@ -1,8 +1,37 @@
 defmodule GenFsmTest do
   use ExUnit.Case
-  doctest GenFsm
+  import ExUnit.CaptureLog
 
-  test "the truth" do
-    assert 1 + 1 == 2
+  defmodule Sample do
+    use GenFSM
+
+    def init(args) do
+      { :ok, :sample, args }
+    end
+  end
+
+  test "sync event stops server on unknown requests" do
+    capture_log fn->
+      Process.flag(:trap_exit, true)
+      assert { :ok, pid } = :gen_fsm.start_link(Sample, [:hello], [])
+
+      catch_exit(:gen_fsm.sync_send_all_state_event(pid, :unknown_request))
+      assert_receive { :EXIT, ^pid, {:bad_sync_event, :sample, :unknown_request} }
+    end
+  after
+    Process.flag(:trap_exit, false)
+  end
+
+  test "event stops server on unknown requests" do
+    capture_log fn->
+      Process.flag(:trap_exit, true)
+      assert { :ok, pid } = :gen_fsm.start_link(Sample, [:hello], [])
+
+      :gen_fsm.send_all_state_event(pid, :unknown_request)
+      assert_receive { :EXIT, ^pid, {:bad_event, :sample, :unknown_request} }
+    end
+  after
+    Process.flag(:trap_exit, false)
   end
 end
+
