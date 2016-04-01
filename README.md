@@ -41,6 +41,6 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
 ## Documentation
 
 Complete [API documentation](http://erlang.org/doc/man/gen_fsm.html) can be found at 
-(http://erlang.org/doc/man/gen_fsm.html)
+http://erlang.org/doc/man/gen_fsm.html
 and OTP [design principal documentation](http://erlang.org/doc/design_principles/fsm.html) 
-lives at (http://erlang.org/doc/man/gen_fsm.html)
+lives at http://erlang.org/doc/man/gen_fsm.html
