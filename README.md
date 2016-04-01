@@ -1,4 +1,4 @@
-<img align="right" src="http://i.imgur.com/XontyAf.jpg">
+<img align="right" src="http://i.imgur.com/OEtTdfe.png">
 
 # GenFsm
 
