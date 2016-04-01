@@ -35,7 +35,7 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
   1. Add gen_fsm to your list of dependencies in `mix.exs`:
 
         def deps do
-          [{:gen_fsm, "~> 0.0.1"}]
+          [{:gen_fsm, "~> 0.0.2"}]
         end
 
 ## Documentation
