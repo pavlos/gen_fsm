@@ -15,7 +15,7 @@ This is understandable, but some of us still need/prefer to use the OTP gen_fsm.
 
 I took the basis of Elixir's old 
 [GenFSM.Behaviour](https://github.com/elixir-lang/elixir/blob/a6f048b3de4a971c15fc8b66397cf2e4597793cb/lib/elixir/lib/gen_fsm/behaviour.ex) 
-and added some additional convenience methods.  Currently missing are the `start_link`, `stop`, and `enter_loop` methods
+and added some additional convenience methods.  Currently missing are the `enter_loop` methods.
 
 ## Usage
 
