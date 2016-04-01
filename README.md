@@ -1,3 +1,5 @@
+<img align="right" src="http://i.imgur.com/XontyAf.jpg">
+
 # GenFsm
 
 Elixir wrapper around Erlang's OTP gen_fsm.  
