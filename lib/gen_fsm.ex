@@ -1,10 +1,8 @@
 defmodule GenFSM do
-  @type event :: term
   @type state_name :: atom
   @type state_data :: term
   @type next_state_name :: atom
   @type new_state_data :: term
-  @type reply :: term
   @type reason :: term
 
   @callback init(args :: term) ::
@@ -13,13 +11,14 @@ defmodule GenFSM do
     :ignore |
     {:stop, reason}
 
-  @callback handle_event(event, state_name, state_data) ::
+  @callback handle_event(event :: term, state_name, state_data) ::
     {:next_state, next_state_name, new_state_data} |
     {:next_state, next_state_name, new_state_data, timeout} |
     {:next_state, next_state_name, new_state_data, :hibernate} |
     {:stop, reason, new_state_data} when new_state_data: term
 
-  @callback handle_sync_event(event, from, state_name, state_data) ::
+  @type reply :: term
+  @callback handle_sync_event(event :: term, from :: {pid, tag :: term}, state_name, state_data) ::
     {:reply, reply, next_state_name, new_state_data} |
     {:reply, reply, next_state_name, new_state_data, timeout} |
     {:reply, reply, next_state_name, new_state_data, :hibernate} |
@@ -90,47 +89,18 @@ defmodule GenFSM do
     :gen.stop(fsm, reason, timeout)
   end
 
-  @spec send_event(fsm_ref, event) :: :ok
-  def send_event(fsm, event) do
-    :gen_fsm.send_event(fsm, event)
-  end
-
-  @spec send_all_state_event(fsm_ref, event) :: :ok
-  def send_all_state_event(fsm, event) do
-    :gen_fsm.send_all_state_event(fsm, event)
-  end
-
-  @spec sync_send_event(fsm_ref, event, timeout) :: :ok
-  def sync_send_event(fsm, event, timeout \\ 5000) do
-    :gen_fsm.sync_send_event(fsm, event, timeout)
-  end
-
-  @spec sync_send_all_state_event(fsm_ref, event, timeout) :: :ok
-  def sync_send_all_state_event(fsm, event, timeout \\ 5000) do
-    :gen_fsm.sync_send_all_state_event(fsm, event, timeout)
-  end
-
-  @type from :: {pid, tag :: term}
-  @spec reply(from, term) :: :ok
-  def reply(caller, reply) do
-    :gen_fsm.reply(caller, reply)
-  end
-
-  @spec send_event_after(integer, event) :: reference
-  def send_event_after(time, event) do
-    :gen_fsm.send_event_after(time, event)
-  end
-
-  @spec start_timer(integer, term) :: reference
-  def start_timer(time, message) do
-    :gen_fsm.start_timer(time, message)
-  end
-
-  @type remaining_time :: integer
-  @spec cancel_timer(reference) :: remaining_time | false
-  def cancel_timer(timer_ref) do
-    :gen_fsm.cancel_timer(timer_ref)
-  end
+  defdelegate [
+    sync_send_event(fsm_ref, event),
+    sync_send_event(fsm_ref, event, timeout),
+    sync_send_all_state_event(fsm_ref, event),
+    sync_send_all_state_event(fsm_ref, event, timeout),
+    send_event(fsm_ref, event),
+    send_all_state_event(fsm_ref, event),
+    reply(caller, reply),
+    send_event_after(time, event),
+    start_timer(time, message),
+    cancel_timer(timer_ref)
+  ], to: :gen_fsm
 
   defmacro __using__(_) do
     quote location: :keep do
