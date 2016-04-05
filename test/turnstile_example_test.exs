@@ -1,4 +1,4 @@
-defmodule GenFSM.TurnstileExampleTest do
+defmodule TurnstileExampleTest do
   use ExUnit.Case
 
   # A module that implement a turnstile that let a person enter if
