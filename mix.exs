@@ -3,13 +3,18 @@ defmodule GenFSM.Mixfile do
 
   def project do
     [app: :gen_fsm,
-     version: "0.0.3",
+     version: "0.0.4",
      elixir: "~> 1.2",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      package: package,
-     deps: [],
+     deps: deps,
      description: description]
+  end
+
+  def deps do
+    [{:ex_doc, ">= 0.11.4", only: [:dev]},
+     {:earmark, ">= 0.0.0", only: [:dev]}]
   end
 
   # Configuration for the OTP application
@@ -30,6 +35,6 @@ defmodule GenFSM.Mixfile do
      maintainers: ["Paul Hieromnimon"],
      licenses: ["Apache 2.0"],
      links: %{"GitHub" => "https://github.com/pavlos/gen_fsm",
-              "Docs" => "https://github.com/pavlos/gen_fsm"}]
+              "Docs" => "https://hexdocs.pm/gen_fsm/"}]
   end
 end
