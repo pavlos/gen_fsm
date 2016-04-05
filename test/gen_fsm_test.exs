@@ -16,7 +16,7 @@ defmodule GenFsmTest do
       assert { :ok, pid } = GenFSM.start_link(Sample, [:hello], [])
 
       catch_exit(:gen_fsm.sync_send_all_state_event(pid, :unknown_request))
-      assert_receive { :EXIT, ^pid, {:bad_sync_event, :sample, :unknown_request} }
+      assert_receive {:EXIT, ^pid, :unexpected_event}
     end
   after
     Process.flag(:trap_exit, false)
@@ -28,10 +28,9 @@ defmodule GenFsmTest do
       assert { :ok, pid } = GenFSM.start_link(Sample, [:hello], [])
 
       :gen_fsm.send_all_state_event(pid, :unknown_request)
-      assert_receive { :EXIT, ^pid, {:bad_event, :sample, :unknown_request} }
+      assert_receive {:EXIT, ^pid, :unexpected_event}
     end
   after
     Process.flag(:trap_exit, false)
   end
 end
-
