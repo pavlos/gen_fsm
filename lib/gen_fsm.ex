@@ -63,6 +63,8 @@ defmodule GenFSM do
   @typedoc "The fsm reference"
   @type fsm_ref :: name | {name, node} | pid()
 
+  @type event :: term
+
   @spec start_link(module, any, options) :: on_start
   def start_link(module, args, options \\ []) when is_atom(module) and is_list(options) do
     do_start(:link, module, args, options)
@@ -89,18 +91,58 @@ defmodule GenFSM do
     :gen.stop(fsm, reason, timeout)
   end
 
-  defdelegate [
-    sync_send_event(fsm_ref, event),
-    sync_send_event(fsm_ref, event, timeout),
-    sync_send_all_state_event(fsm_ref, event),
-    sync_send_all_state_event(fsm_ref, event, timeout),
-    send_event(fsm_ref, event),
-    send_all_state_event(fsm_ref, event),
-    reply(caller, reply),
-    send_event_after(time, event),
-    start_timer(time, message),
-    cancel_timer(timer_ref)
-  ], to: :gen_fsm
+  @doc """
+  Sends an `event` to the `GenFSM` and waits until a reply arrives
+  or a timeout occurs.
+  """
+  @spec sync_send_event(fsm_ref, event) :: :ok
+  defdelegate sync_send_event(fsm_ref, event), to: :gen_fsm
+
+  @doc """
+  Sends an event to the `GenFSM` and waits until a reply arrives
+  or a `timeout` occurs.
+  """
+  @spec sync_send_all_state_event(fsm_ref, event, timeout | :infinity) :: :ok
+  defdelegate sync_send_all_state_event(fsm_ref, event, timeout), to: :gen_fsm
+
+  @doc """
+  Sends an event asynchronously to the `GenFSM` and returns
+  `:ok` immediately.
+  """
+  @spec send_event(fsm_ref, event) :: :ok
+  defdelegate send_event(fsm_ref, event), to: :gen_fsm
+
+  @doc """
+  This function can be used by a `GenFSM` to explicitly send a
+  reply to a client process.
+  """
+  @type from :: {pid, tag :: term}
+  @spec reply(from, reply) :: :ok
+  defdelegate reply(caller, reply), to: :gen_fsm
+
+  @doc """
+  Sends a delayed event internally in the `GenFSM` that calls this
+  function after `time` in ms. Returns immediately a `reference` that
+  can be used to cancel the delayed send using `cancel_timer/1`.
+  """
+  @spec send_event_after(integer, event) :: reference
+  defdelegate send_event_after(time, event), to: :gen_fsm
+
+  @doc """
+  Sends a timeout event internally in the `GenFSM` that calls this
+  function after `time` set in ms. Returns immediately a `reference`
+  that can be used to cancel the timer using `cancel_timer/1`.
+  """
+  @spec start_timer(integer, term) :: reference
+  defdelegate start_timer(time, message), to: :gen_fsm
+
+  @doc """
+  Cancels an internal timer referred by `reference` in the `GenFSM`
+  that calls this function.
+  """
+  @type remaining_time :: integer
+  @spec cancel_timer(reference) :: remaining_time | false
+  defdelegate cancel_timer(timer_ref), to: :gen_fsm
 
   defmacro __using__(_) do
     quote location: :keep do
