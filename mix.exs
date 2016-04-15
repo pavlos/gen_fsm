@@ -32,6 +32,7 @@ defmodule GenFSM.Mixfile do
 
   defp package do
     [# These are the default files included in the package
+     files: ["lib", "mix.exs", "README*", "LICENSE",
      maintainers: ["Paul Hieromnimon"],
      licenses: ["Apache 2.0"],
      links: %{"GitHub" => "https://github.com/pavlos/gen_fsm",
